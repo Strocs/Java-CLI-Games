@@ -31,10 +31,33 @@ public class TicTacToe implements Game {
   private static void startGame() {
     System.out.print("Choose a name: ");
     String name = scanner.nextLine();
-    Player player1 = new Player(name);
+
+    User player = new User(name, scanner);
+    Computer machine = new Computer();
+
+    Board board = new Board();
+
+    // randomly define what player start
 
     do {
-      System.out.print("\f Player: " + player1.name);
+      board.printBoard();
+
+      System.out.print("Choose your play: ");
+      String play = player.play();
+
+      // play first based on what player start
+      // maybe save the turns on an array with the instance: {player1, player2}
+      boolean winner = board.checkWinner(play);
+
+      // If player win do:
+      if (winner) {
+        player.setScore(winner);
+        machine.setScore(!winner);
+      }
+
+      // if player not win in this round, computer plays and check winner
+      // if nobody won this turn, go to next until a winner is found
+
     } while (true);
   }
 
