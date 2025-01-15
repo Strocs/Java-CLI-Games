@@ -3,39 +3,61 @@ package org.games.tictactoe;
 import org.games.utils.Screen;
 
 public class Board {
-  private final Integer[][] board = {
-      { 8, 1, 6 },
-      { 3, 5, 7 },
-      { 4, 9, 2 }
+  private final Integer[] boardValues = {
+      8, 1, 6,
+      3, 5, 7,
+      4, 9, 2 };
+  private String board = """
+       🤖 Let's play Tic-Tac-Toe! 🎉
+             ╔═══╦═══╦═══╗
+             ║ 1 │ 2 │ 3 ║
+             ╠═══╬═══╬═══╣
+             ║ 4 │ 5 │ 6 ║
+             ╠═══╬═══╬═══╣
+             ║ 7 │ 8 │ 9 ║
+             ╚═══╩═══╩═══╝
+       👉 ¡It's your turn, human!
+       😎 Choose a number:
+      """;
+
+  private int turn = 0;
+  private String[] symbols = { "O", "X" };
+  private int[][] playersMoves = {
+      {},
+      {}
   };
 
   public void printBoard() {
-    String board = """
-           1 | 2 | 3
-          ---+---+---
-           4 | 5 | 6
-          ---+---+---
-           7 | 8 | 9
-        """;
     Screen.clearScreen();
     Screen.printBlock(board);
   }
 
-  private void updateBoard(Integer[] coords) {
+  public void updateBoard(int move) {
+    Screen.clearScreen();
+    board = board.replaceFirst(String.valueOf(move), symbols[turn]);
+    Screen.printBlock(board);
   }
 
-  private Integer[] validateMove(String move) {
-    Integer[] coords = new Integer[2];
-    return coords;
+  private void validateMove(int move) {
+    if (move < 1 || move > 9)
+      throw new Error("The range is invalid. Please press a valid number.");
   }
 
-  public boolean checkWinner(String play) {
-    Integer[] coords = validateMove(play);
-    if (coords == null)
-      return false;
+  private void changeTurn() {
+    turn = turn == 0 ? 1 : 0;
+  }
 
-    updateBoard(coords);
+  private void addMove(int move) {
+    int value = boardValues[move - 1];
+    int[] currentPlayerMoves = playersMoves[turn];
+  }
+
+  public boolean isWinner(int move) {
     return false;
   }
 
+  public void move(int move) {
+    validateMove(move);
+    changeTurn();
+  }
 }

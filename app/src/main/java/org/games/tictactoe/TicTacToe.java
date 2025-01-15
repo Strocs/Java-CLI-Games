@@ -8,23 +8,29 @@ import org.games.utils.Screen;
 
 public class TicTacToe implements Game {
   private static Scanner scanner;
-  private Player player;
+  private HumanPlayer player;
 
   public TicTacToe(User player, Scanner sc) {
     scanner = sc;
-    this.player = new Player(sc, player);
+    this.player = new HumanPlayer(sc, player);
   }
 
   @Override
   public void start() {
     Screen.clearScreen();
-    Screen.printBlock("""
+
+    String START_GAME_MSG = """
         ********************************
         *** Wellcome to StrocsTacToe ***
         ********************************
-              Player:
 
-        """);
+                Player: %s
+
+        """;
+
+    String START_GAME_SCREEN = String.format(START_GAME_MSG, player.name);
+
+    Screen.printBlock(START_GAME_SCREEN);
 
     System.out.print("(n) New Game | (q) Quit\n");
 
@@ -33,13 +39,14 @@ public class TicTacToe implements Game {
     switch (action) {
       case 'n':
         startGame();
+        break;
       case 'q':
         return; // Exit game
     }
   }
 
   private void startGame() {
-    Computer machine = new Computer();
+    Player machine = new ComputerPlayer();
     Score playerScore = new Score(player.id);
     Board board = new Board();
 
@@ -47,34 +54,41 @@ public class TicTacToe implements Game {
 
     // randomly define what player start
 
+    Player[] players = { player, machine };
+
+    int firstTurn = (int) (Math.random() * 2);
+    int secondTurn = firstTurn == 0 ? 1 : 0;
+
+    board.printBoard();
+
     do {
-      board.printBoard();
+      int p1move = players[firstTurn].play();
+      board.move(p1move);
 
-      System.out.print("Choose your play: ");
-      winner = board.checkWinner(player.play());
-      // player 1 play
+      winner = board.isWinner(p1move);
+      board.updateBoard(p1move);
 
-      // play first based on what player start
-      // maybe save the turns on an array with the instance: {player1, player2}
-
-      board.printBoard();
-
-      // If player win do:
       if (winner) {
-        playerScore.setWins();
+        if (firstTurn == 0) {
+          playerScore.setWins();
+        } else {
+          playerScore.setLoses();
+        }
         return;
       }
 
-      winner = board.checkWinner(machine.play());
+      int p2move = players[secondTurn].play();
+      board.move(p2move);
+      board.updateBoard(p2move);
 
       if (winner) {
-        playerScore.setLoses();
+        if (firstTurn == 0) {
+          playerScore.setWins();
+        } else {
+          playerScore.setLoses();
+        }
         return;
       }
-
-      // if player not win in this round, computer plays and check winner
-      // if nobody won this turn, go to next until a winner is found
-
     } while (!winner);
   }
 }
