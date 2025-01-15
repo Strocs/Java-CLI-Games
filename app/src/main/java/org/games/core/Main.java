@@ -1,21 +1,28 @@
-package org.games;
+package org.games.core;
 
 import java.util.Scanner;
 
 import org.games.tictactoe.TicTacToe;
+import org.games.utils.Screen;
 
 public class Main {
   private static boolean running = true;
   private static Scanner scanner;
 
   public static void main(String[] args) {
-    System.out.println("\n**Welcome to CLI Games**\n");
+    Screen.clearScreen();
+    Screen.printBlock(Texts.START_MSG);
+
     scanner = new Scanner(System.in);
+    System.out.print(Texts.CHOOSE_NAME);
+    String name = scanner.nextLine();
+
+    User player = new User(name);
 
     do {
       printMenu();
       int selection = getUserSelection();
-      startGame(selection);
+      startGame(selection, player);
     } while (running);
 
     scanner.close();
@@ -48,12 +55,12 @@ public class Main {
     }
   }
 
-  private static void startGame(int selection) {
+  private static void startGame(int selection, User player) {
     if (selection == 0)
       return;
 
     Game game = switch (selection) {
-      case 1 -> new TicTacToe(scanner);
+      case 1 -> new TicTacToe(player, scanner);
       case 2 -> null;
       default -> null;
     };

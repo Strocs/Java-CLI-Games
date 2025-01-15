@@ -1,5 +1,7 @@
 package org.games.tictactoe;
 
+import org.games.utils.Screen;
+
 public class Board {
   private final Integer[][] board = {
       { 8, 1, 6 },
@@ -7,12 +9,16 @@ public class Board {
       { 4, 9, 2 }
   };
 
-  public Board() {
-
-  }
-
   public void printBoard() {
-    System.out.print("\n");
+    String board = """
+           1 | 2 | 3
+          ---+---+---
+           4 | 5 | 6
+          ---+---+---
+           7 | 8 | 9
+        """;
+    Screen.clearScreen();
+    Screen.printBlock(board);
   }
 
   private void updateBoard(Integer[] coords) {

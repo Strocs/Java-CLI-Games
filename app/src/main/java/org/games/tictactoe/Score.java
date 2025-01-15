@@ -1,10 +1,20 @@
 package org.games.tictactoe;
 
 public class Score {
+  private long playerId;
   private int[] score = { 0, 0 };
   private double globalRating = 0;
 
-  public double getGlobalScore() {
+  public Score(long playerId) {
+    this.playerId = playerId;
+  }
+
+  public double getGlobalScore(long id) {
+    if (id != this.playerId) {
+      System.out.println("");
+
+      return 0;
+    }
     return globalRating;
   }
 

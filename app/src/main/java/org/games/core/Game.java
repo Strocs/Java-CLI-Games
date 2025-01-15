@@ -1,4 +1,4 @@
-package org.games;
+package org.games.core;
 
 public interface Game {
   void start();

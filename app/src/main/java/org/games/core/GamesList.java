@@ -1,4 +1,4 @@
-package org.games;
+package org.games.core;
 
 public enum GamesList {
   TIC_TAC_TOE(1, "Tic Tac Toe");

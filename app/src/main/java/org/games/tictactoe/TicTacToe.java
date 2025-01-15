@@ -2,19 +2,29 @@ package org.games.tictactoe;
 
 import java.util.Scanner;
 
-import org.games.Game;
+import org.games.core.Game;
+import org.games.core.User;
+import org.games.utils.Screen;
 
 public class TicTacToe implements Game {
   private static Scanner scanner;
+  private Player player;
 
-  public TicTacToe(Scanner sc) {
+  public TicTacToe(User player, Scanner sc) {
     scanner = sc;
+    this.player = new Player(sc, player);
   }
 
   @Override
   public void start() {
-    System.out.println(
-        "\f\n******************************\n** Wellcome to StrocsTacToe **\n******************************\n");
+    Screen.clearScreen();
+    Screen.printBlock("""
+        ********************************
+        *** Wellcome to StrocsTacToe ***
+        ********************************
+              Player:
+
+        """);
 
     System.out.print("(n) New Game | (q) Quit\n");
 
@@ -28,14 +38,12 @@ public class TicTacToe implements Game {
     }
   }
 
-  private static void startGame() {
-    System.out.print("Choose a name: ");
-    String name = scanner.nextLine();
-
-    User player = new User(name, scanner);
+  private void startGame() {
     Computer machine = new Computer();
-
+    Score playerScore = new Score(player.id);
     Board board = new Board();
+
+    boolean winner = false;
 
     // randomly define what player start
 
@@ -43,22 +51,30 @@ public class TicTacToe implements Game {
       board.printBoard();
 
       System.out.print("Choose your play: ");
-      String play = player.play();
+      winner = board.checkWinner(player.play());
+      // player 1 play
 
       // play first based on what player start
       // maybe save the turns on an array with the instance: {player1, player2}
-      boolean winner = board.checkWinner(play);
+
+      board.printBoard();
 
       // If player win do:
       if (winner) {
-        player.setScore(winner);
-        machine.setScore(!winner);
+        playerScore.setWins();
+        return;
+      }
+
+      winner = board.checkWinner(machine.play());
+
+      if (winner) {
+        playerScore.setLoses();
+        return;
       }
 
       // if player not win in this round, computer plays and check winner
       // if nobody won this turn, go to next until a winner is found
 
-    } while (true);
+    } while (!winner);
   }
-
 }

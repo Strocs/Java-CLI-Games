@@ -1,7 +1,22 @@
 package org.games.tictactoe;
 
-public interface Player {
-  String play();
+import java.util.Scanner;
 
-  void setScore(boolean winner);
+import org.games.core.User;
+
+public class Player {
+  long id;
+  String name;
+  Scanner scanner;
+
+  Player(Scanner scanner, User user) {
+    this.id = user.id;
+    this.name = user.name;
+    this.scanner = scanner;
+  }
+
+  String play() {
+    String play = scanner.nextLine();
+    return play;
+  }
 }
